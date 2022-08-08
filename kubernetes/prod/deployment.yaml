@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: gpodashprod
+  name: gpodashdeployment
+  labels:
+    app: gpodashapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: gpodashapp
+  template:
+    metadata:
+      labels:
+        app: gpodashapp
+    spec:
+      containers:
+      - image: docker.artifactory.sherwin.com/gpo/sw-corp-it/sw_plopsboard:latest
+        imagePullPolicy: Always
+        name: gpodashapp
+        ports:
+        - containerPort: 7070
+        resources: {}
+        env:
+          - name: DB_DATABASE 
+            valueFrom:
+              secretKeyRef:
+                name: gpodashcreds
+                key: DB_DATABASE 
+          - name: DB_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                name: gpodashcreds
+                key: DB_HOSTNAME
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: gpodashcreds
+                key: DB_PASSWORD
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: gpodashcreds
+                key: DB_USERNAME
+      restartPolicy: Always
+status: {}

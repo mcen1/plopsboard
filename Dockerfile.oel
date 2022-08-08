@@ -1,0 +1,18 @@
+FROM docker.cpartdc01.sherwin.com/oraclelinux:8
+USER root
+COPY app/ /app
+ADD http://swroot.sherwin.com/swroot.pem /etc/pki/ca-trust/source/anchors/swroot.crt
+RUN update-ca-trust && \
+    dnf update -y  && \
+    unset http_proxy && \
+    useradd flask && \
+    dnf install -y python3 openssl && \
+    pip3 install --upgrade pip && \
+    pip3 install -r /app/requirements.txt && \
+    rm -rf /var/cache/dnf && \
+    chown -R flask: /app
+ENV PORT 7070
+EXPOSE 7070
+WORKDIR /app
+HEALTHCHECK CMD curl -k --fail https://localhost:7070/health | grep 'ok' || exit 1
+CMD cd /app; /app/rungunicorn.sh

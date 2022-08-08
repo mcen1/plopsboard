@@ -1,0 +1,15 @@
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: oidc-employees
+  namespace: gpodashqa
+  annotation:
+    kubernetes.io/ingress.class: kong
+plugin: oidc
+# THIS IS kubernetes-ingress-controller v0.9.0 or newer ONLY:
+# https://github.com/Kong/kubernetes-ingress-controller/pull/618/files
+configFrom:
+  secretKeyRef:
+    name: oidc-client-secrets
+    key: kong-oidc.yaml

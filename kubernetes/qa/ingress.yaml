@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gpodash-kong-ingress
+  namespace: gpodashqa
+  annotations:
+    kubernetes.io/ingress.class: kong
+    konghq.com/preserve-host: "true"
+    konghq.com/plugins: oidc-employees
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+    - host: gpodashqa.sherwin.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: gpodashsvc
+              servicePort: 7070
+  tls:
+  - hosts:
+     - gpodashqa.sherwin.com
+
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongIngress
+metadata:
+  name: https-only
+  namespace: gpodashqa
+route:
+  protocols:
+    - https
+  https_redirect_status_code: 302
+  strip_path: true
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: oidc-employees
+  namespace: gpodashqa
+  annotation:
+    kubernetes.io/ingress.class: kong
+plugin: oidc
+# THIS IS kubernetes-ingress-controller v0.9.0 or newer ONLY:
+# https://github.com/Kong/kubernetes-ingress-controller/pull/618/files
+configFrom:
+  secretKeyRef:
+    name: oidc-client-secrets
+    key: kong-oidc.yaml

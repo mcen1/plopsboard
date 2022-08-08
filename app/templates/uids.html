@@ -1,0 +1,117 @@
+<html>
+
+<head>
+  <title>UIDs</title>
+  <script src="/static/js/TableFilter/dist/tablefilter/tablefilter.js"></script>
+  <link rel="stylesheet" href="/static/styles/main.css">
+  <link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+  <link id="tf_11d36c6b-2bd3-0e0f-a936-00be86dad3b9_style" type="text/css" rel="stylesheet" href="/static/js/TableFilter/dist/tablefilter/style/tablefilter.css">
+<style>
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.contenta {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+</style>
+</head>
+   
+<body>
+<div class='superhead'>
+&nbsp;UIDs
+</div>
+<br>
+  <center>
+  <div style='display:inline-block;margin:8px;'>
+  <b>All information on this page is updated once per day</b><br>
+<button type="button" class="collapsible">See all unoccupied UIDs between 3000 and 6000</button>
+<div class="contenta">
+    {% autoescape false %}
+<p>{{ validuids }}</p>
+    {% endautoescape %}
+
+
+</div>
+  </center>
+<br>
+<center>
+<button type="button" class="collapsible" style='width:512px'>See all UIDs with usernames</button>
+<div class="contenta">
+
+<b>All UIDs with IDs:</b>
+<br>
+<table class='sortable'>   
+<tbody>
+  <tr><th><b>id</b></th><th><b>uid</b></th></tr>
+  {% for result in alluids %}
+  <tr class='alternating'>
+    {% autoescape false %}
+      <tr><td class=''>{{ result[0] }}</td><td class=''>{{ result[1] }}</td></tr>
+    {% endautoescape %}
+  {% endfor %}
+</tbody>
+</table>
+</div>
+
+<script>
+var tf = new TableFilter(document.querySelector('.sortable'), {
+    base_path: '/TableFilter/dist/tablefilter/',
+    status_bar: true,
+rows_counter: true,
+
+    highlight_keywords: true,
+    extensions: [{ name: 'sort' },{
+              name: 'colsVisibility',
+              at_start: [],
+              text: 'Show/hide columns',
+              enable_tick_all: true
+          }],
+    base_path: '/js/TableFilter/dist/tablefilter/',
+    status_bar: true,
+    load_filters_on_demand: true,
+    responsive:true,
+    btn_reset: true,
+    rows_counter: true,
+    highlight_keywords: true,
+
+});
+tf.init();
+tf.activateFilter(0);
+  tf.filter();
+</script>
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
+</body>
+</html>

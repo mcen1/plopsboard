@@ -1,0 +1,104 @@
+<html>
+
+<head>
+  <title>Sarbanes-Oxley</title>
+  <script src="/static/js/TableFilter/dist/tablefilter/tablefilter.js"></script>
+  <link rel="stylesheet" href="/static/styles/main.css">
+  <link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+  <link id="tf_11d36c6b-2bd3-0e0f-a936-00be86dad3b9_style" type="text/css" rel="stylesheet" href="/static/js/TableFilter/dist/tablefilter/style/tablefilter.css">
+</head>
+
+<body>
+<div class='superhead'>
+&nbsp;SOX
+</div>
+<br>
+&nbsp;<a href='/sox.csv'>Download full CSV</a><br>
+<center>
+<br>
+<table class='sortable'>
+<tbody>
+  <tr>
+  {% for result in mydict['headers'] %}
+    <th>{{result.title()}}</th>
+  {% endfor %}
+  </tr>
+  {% for result in mydict['data'] %}
+  <tr class='alternating'>
+    {% autoescape false %}
+    <td>{{ result }}</td>
+    {% for fielda in mydict['data'][result] %}
+      {% if loop.index==1 %}
+        {% if "COMPLIANT" in mydict['data'][result][fielda] %}
+         <td class='table-success'>{{ mydict['data'][result][fielda] }}</td>
+         {% else %}
+         <td class='table-danger'>{{ mydict['data'][result][fielda] }}</td>
+        {% endif %}
+      {% else %}
+         <td class=''>{{ mydict['data'][result][fielda] }}</td>
+      {% endif %}
+    {% endfor %}
+    {% endautoescape %}
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+Data last updated: {{ updatedate[0][0] }}
+<br>
+</center>
+
+<script>
+var tf = new TableFilter(document.querySelector('.sortable'), {
+    base_path: '/TableFilter/dist/tablefilter/',
+    status_bar: true,
+rows_counter: true,
+
+    highlight_keywords: true,
+    extensions: [{ name: 'sort' },{
+              name: 'colsVisibility',
+              at_start: [],
+              text: 'Show/hide columns',
+              enable_tick_all: true
+          }],
+    base_path: '/js/TableFilter/dist/tablefilter/',
+    col_2: 'select',
+    status_bar: true,
+    load_filters_on_demand: true,
+    responsive:true,
+    btn_reset: true,
+    rows_counter: true,
+    highlight_keywords: true,
+
+});
+tf.init();
+tf.activateFilter(0);
+  tf.filter();
+function export_csv() {
+
+    var forma = document.createElement("form");
+    forma.setAttribute("method", "post");
+    forma.setAttribute("action", '/sox2csv.csv');
+
+    var hiddenFielda = document.createElement("input");
+    hiddenFielda.setAttribute("type", "hidden");
+    hiddenFielda.setAttribute("name", "Header");
+    hiddenFielda.setAttribute("value", tf.getHeadersText());
+
+    forma.appendChild(hiddenFielda);
+
+    var hiddenFielda = document.createElement("input");
+    hiddenFielda.setAttribute("type", "hidden");
+    hiddenFielda.setAttribute("name", "String");
+    hiddenFielda.setAttribute("value", tf.getFilteredData());
+
+    forma.appendChild(hiddenFielda);
+    document.body.appendChild(forma);
+    forma.submit();
+}
+
+</script>
+
+<button onclick="export_csv();">Export filtered results to CSV</button>
+
+</body>
+</html>

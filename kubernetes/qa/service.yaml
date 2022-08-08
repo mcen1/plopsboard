@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gpodashsvc
+  namespace: gpodashqa
+  annotations:
+    konghq.com/protocol: https
+spec:
+  ports:
+  - name: default
+    port: 7070
+    protocol: TCP
+    targetPort: 7070
+  selector:
+    app: gpodashapp
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

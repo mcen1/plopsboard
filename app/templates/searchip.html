@@ -1,0 +1,77 @@
+<html>
+
+<head>
+  <title>VMware subnet search</title>
+  <script src="/static/js/TableFilter/dist/tablefilter/tablefilter.js"></script>
+  <link rel="stylesheet" href="/static/styles/main.css">
+  <link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+  <link id="tf_11d36c6b-2bd3-0e0f-a936-00be86dad3b9_style" type="text/css" rel="stylesheet" href="/static/js/TableFilter/dist/tablefilter/style/tablefilter.css">
+</head>
+   
+<body>
+<div class='superhead'>
+&nbsp;VMware subnet search
+</div>
+<br>
+<br>
+<center>
+<table class='sortable'>   
+<tbody>
+  <tr>
+  <th>
+  vCenter
+  </th>
+  <th>
+  Datacenter
+  </th>
+  <th>
+  Cluster
+  </th>
+  <th>
+  Subnet name
+  </th>
+  </tr>
+  {% for result in mydict %}
+  <tr class='alternating'>
+    {% autoescape false %}
+    {% for fielda in result %}
+        {% if loop.index<5 %}
+        <td class=''>{{ fielda }}</td>
+      {% endif %}
+    {% endfor %}
+    {% endautoescape %}
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+</center>
+
+<script>
+var tf = new TableFilter(document.querySelector('.sortable'), {
+    base_path: '/TableFilter/dist/tablefilter/',
+    status_bar: true,
+rows_counter: true,
+
+    highlight_keywords: true,
+    extensions: [{ name: 'sort' },{
+              name: 'colsVisibility',
+              at_start: [],
+              text: 'Show/hide columns',
+              enable_tick_all: true
+          }],
+    base_path: '/js/TableFilter/dist/tablefilter/',
+    status_bar: true,
+    load_filters_on_demand: true,
+    responsive:true,
+    btn_reset: true,
+    rows_counter: true,
+    highlight_keywords: true,
+
+});
+tf.init();
+tf.activateFilter(0);
+  tf.filter();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<html>
+
+   <head>
+   <title>GPO dashboard</title>
+  <link rel="stylesheet" href="/static/styles/main.css">
+  <link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+  <link id="tf_11d36c6b-2bd3-0e0f-a936-00be86dad3b9_style" type="text/css" rel="stylesheet" href="/static/js/TableFilter/dist/tablefilter/style/tablefilter.css">
+   </head>
+   
+   <body>
+  <center>
+   <div>
+   Hello, {{ clientheaders['name'] }}.<br>
+   <br><b>Reports</b>
+   <br><a href='/patching'>Patching</a> (<a href='/patching.csv'>csv</a>) (<a href='/patcharchive'>archive</a>)
+   <br><a href='/sox'>SOX</a> (<a href='/sox.csv'>csv</a>)
+   <br><a href='/wm'>Well-managed</a> (<a href='/wm.csv'>csv</a>)
+   <br><a href='/os_users'>UserAcces</a> (<a href='/os_users.csv'>csv</a>)
+   <br><b>Other</b>
+   <br><a href='/adsearch'>Search Active Directory</a>
+   <br><a href='/uids'>Available UIDs</a>
+   </div>
+   </center>
+   </body>
+   
+</html>
